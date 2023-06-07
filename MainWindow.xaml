@@ -1,0 +1,2039 @@
+﻿<Window x:Class="wpfAssessment.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:wpfAssessment"
+        xmlns:con="clr-namespace:wpfAssessment.Convertors"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="800"
+        Width="1100"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+
+
+    <!--<Window.DataContext>
+        <local:MVVM />
+    </Window.DataContext>-->
+
+    <Window.Resources>
+
+        <!--<Style 
+               TargetType="{x:Type Border}">
+            <Setter Property="Background"
+                    Value="Gray" />
+            <Setter Property="BorderBrush"
+                    Value="#FFE0DEDE" />
+
+            -->
+        <!--<Setter Property="Margin" Value="2"/>-->
+        <!--
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth=".5"
+                                      Direction="220"
+                                      Color="#3E6492"
+                                      Opacity="0.2"
+                                      BlurRadius="10" />
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+
+        <con:DateTimeConvertor x:Key="DateTimeConvertor" />
+
+        <con:FirstCharConvertor x:Key="FirstCharConvertor" />
+
+
+        <con:ImageToSourceConverter x:Key="ImageToSourceConverter" />
+
+
+        <SolidColorBrush x:Key="HeaderBar">#301134</SolidColorBrush>
+
+
+        <SolidColorBrush x:Key="TextBoxColor">#3E2142</SolidColorBrush>
+
+        <SolidColorBrush x:Key="buttonlabel">#C5B7C5</SolidColorBrush>
+
+        <SolidColorBrush x:Key="AppGray">#606060</SolidColorBrush>
+
+
+
+
+        <Style x:Key="MessageTextBox"
+               TargetType="{x:Type TextBox}">
+
+            <Setter Property="Foreground"
+                    Value="Black" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="txtBorder"
+                                Height="{TemplateBinding Height}"
+                                CornerRadius="5"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                BorderBrush="Gray">
+                            <Grid Margin="5,0">
+
+
+                                <StackPanel HorizontalAlignment="Left"
+                                            Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="{x:Type StackPanel}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text,ElementName=txtShow}"
+                                                             Value="">
+                                                    <Setter Property="Visibility"
+                                                            Value="Visible" />
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+                                            <Setter Property="Visibility"
+                                                    Value="Hidden" />
+                                        </Style>
+                                    </StackPanel.Style>
+                                   
+
+                                    <TextBlock Margin="0,0,0,0"
+                                               Foreground="{StaticResource AppGray}"
+                                               Text="{TemplateBinding Uid}"
+                                               FontSize="15" FontFamily="Lato"
+                                               VerticalAlignment="Top" 
+                                               HorizontalAlignment="Left">
+
+                                    </TextBlock>
+                                </StackPanel>
+
+
+
+
+
+                                <TextBox x:Name="txtShow"
+                                         Foreground="{TemplateBinding Foreground}"
+                                         Background="Transparent"
+                                         Focusable="True"
+                                         Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text, UpdateSourceTrigger=PropertyChanged}"
+                                         BorderBrush="Transparent"
+                                         BorderThickness="0"
+                                         FontSize="14"
+                                         VerticalContentAlignment="Top"
+                                         HorizontalContentAlignment="Left"
+                                         TextWrapping="Wrap" 
+                                         FontWeight="{TemplateBinding FontWeight}"
+                                         FontStyle="{TemplateBinding FontStyle}"
+                                         />
+
+                            </Grid>
+
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused"
+                                     Value="True">
+                                <Setter TargetName="txtShow"
+                                        Property="FocusManager.FocusedElement"
+                                        Value="{Binding ElementName=txtShow}" />
+
+                            </Trigger>
+
+
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="FontFamily"
+                                               Value="Error" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="txtBorder"
+                                        Property="BorderBrush"
+                                        Value="Red" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="FontFamily"
+                                               Value="Edit" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="txtBorder"
+                                        Property="Background"
+                                        Value="gray" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style x:Key="SearchTextBox"
+               TargetType="{x:Type TextBox}">
+
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="txtBorder"
+                                Height="{TemplateBinding Height}"
+                                CornerRadius="5"
+                                BorderThickness="1"
+                                Background="{StaticResource TextBoxColor}"
+                                BorderBrush="Gray">
+                            <Grid Margin="5,0">
+
+
+                                <StackPanel HorizontalAlignment="Center"
+                                            Orientation="Horizontal">
+                                    <StackPanel.Style>
+                                        <Style TargetType="{x:Type StackPanel}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text,ElementName=txtShow}"
+                                                             Value="">
+                                                    <Setter Property="Visibility"
+                                                            Value="Visible" />
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+                                            <Setter Property="Visibility"
+                                                    Value="Hidden" />
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <Path Stretch="Fill"
+                                          Height="15"
+                                          Width="15"
+                                          Fill="LightGray"
+                                          Data="{StaticResource Search}" />
+
+                                    <TextBlock Margin="10,0,0,0"
+                                               Foreground="LightGray"
+                                               Text="{TemplateBinding Uid}"
+                                               FontSize="12"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left">
+
+                                    </TextBlock>
+                                </StackPanel>
+
+
+
+
+
+                                <TextBox x:Name="txtShow"
+                                         Foreground="{TemplateBinding Foreground}"
+                                         Background="Transparent"
+                                         Focusable="True"
+                                         Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text, UpdateSourceTrigger=PropertyChanged}"
+                                         BorderBrush="Transparent"
+                                         BorderThickness="0"
+                                         FontSize="14"
+                                         VerticalContentAlignment="Center"
+                                         HorizontalContentAlignment="Left"
+                                         TextWrapping="Wrap" />
+
+                            </Grid>
+
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused"
+                                     Value="True">
+                                <Setter TargetName="txtShow"
+                                        Property="FocusManager.FocusedElement"
+                                        Value="{Binding ElementName=txtShow}" />
+
+                            </Trigger>
+
+
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="FontFamily"
+                                               Value="Error" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="txtBorder"
+                                        Property="BorderBrush"
+                                        Value="Red" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="FontFamily"
+                                               Value="Edit" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="txtBorder"
+                                        Property="Background"
+                                        Value="gray" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style x:Key="btnHeader"
+               TargetType="Button">
+            <Setter Property="Height"
+                    Value="15" />
+            <Setter Property="Width"
+                    Value="15" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="360" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+        <Style x:Key="ButtonIcon"
+               TargetType="Button">
+
+
+
+            <Setter Property="Height"
+                    Value="15" />
+            <Setter Property="Width"
+                    Value="15" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+
+                        <Border Background="Transparent"
+                                Name="border">
+                            <Grid>
+                                <Path  Height="{TemplateBinding Height}"
+                                       Width="{TemplateBinding Width}"
+                                       Name="ico"
+                                       Data="{TemplateBinding Content}"
+                                       Fill="{TemplateBinding Foreground}"
+                                       Stretch="Uniform" />
+                            </Grid>
+
+
+                        </Border>
+
+
+
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseCaptured"
+                                     Value="True">
+
+
+
+
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:.1"
+                                                             AutoReverse="True" />
+
+
+
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
+
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+
+
+
+
+        </Style>
+
+        <Style x:Key="btnStyle"
+               TargetType="{x:Type RadioButton}">
+            <Setter Property="Height"
+                    Value="50" />
+            <Setter Property="IsChecked"
+                    Value="False" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Border x:Name="border1"
+                                Padding="3"
+                                BorderThickness="3"
+                                BorderBrush="White"
+                                CornerRadius="10">
+
+                            <Border Background="Gray"
+                                    CornerRadius="10">
+                                <TextBlock VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Foreground="White"
+                                           FontSize="25"
+                                           Text="{TemplateBinding Content}" />
+                            </Border>
+
+                        </Border>
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked"
+                                     Value="False">
+                                <Setter Property="BorderBrush"
+                                        TargetName="border1"
+                                        Value="{x:Null}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+        <Style x:Key="ButtonIconPen"
+               TargetType="Button">
+
+
+
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+
+                        <Border Background="White"
+                                CornerRadius="360"
+                                Width="40"
+                                Height="40"
+                                Name="border">
+
+
+
+                            <Path  Width="15"
+                                   Height="15"
+                                   Name="ico"
+                                   Data="{TemplateBinding Content}"
+                                   Fill="Black"
+                                   Stretch="Uniform" />
+                        </Border>
+
+
+
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseCaptured"
+                                     Value="True">
+
+
+
+
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:.1"
+                                                             AutoReverse="True" />
+
+
+
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
+
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+
+
+
+
+        </Style>
+
+
+        <Style x:Key="ButtonIconHyperlink"
+               TargetType="Button">
+
+
+            <Setter Property="MinHeight"
+                    Value="30" />
+
+            <Setter Property="Foreground"
+                    Value="{StaticResource buttonlabel}" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+
+                        <Border x:Name="border">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Path  Width="15"
+                                       Height="15"
+                                       Name="ico"
+                                       Data="{TemplateBinding Content}"
+                                       Fill="{TemplateBinding Foreground}"
+                                       Stretch="Uniform" />
+
+                                <TextBlock Foreground="{TemplateBinding  Foreground}"
+                                           FontSize="15"
+                                           FontFamily="Lato"
+                                           FontStyle="Normal"
+                                           Grid.Column="2"
+                                           Text="{TemplateBinding Uid }"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+
+
+                        </Border>
+
+
+
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseCaptured"
+                                     Value="True">
+
+
+
+
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:.1"
+                                                             AutoReverse="True" />
+
+
+
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
+
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+
+
+
+
+        </Style>
+
+
+        <Style TargetType="ToggleButton"
+               x:Key="ButtonAsExpander">
+
+            <Setter Property="Foreground"
+                    Value="{StaticResource buttonlabel}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid Name="border">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Path Margin="3 0 0 0"
+                                  HorizontalAlignment="Center"
+                                  Height="10"
+                                  Width="10"
+                                  Name="PathLogo"
+                                  Data="{StaticResource MenuDown}"
+                                  Fill="{TemplateBinding Foreground}"
+                                  Stretch="Uniform" />
+
+                            <TextBlock Foreground="{StaticResource buttonlabel}"
+                                       FontSize="15"
+                                       FontFamily="Lato"
+                                       FontStyle="Normal"
+                                       Grid.Column="2"
+                                       Text="{TemplateBinding Content }"
+                                       VerticalAlignment="Center" />
+
+                        </Grid>
+
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseCaptured"
+                                     Value="True">
+
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Grid.Opacity)"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:.1"
+                                                             AutoReverse="True" />
+
+
+
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Grid.Opacity)"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
+
+
+                            </Trigger>
+
+
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+                                <Setter Property="Data"
+                                        TargetName="PathLogo"
+                                        Value="{StaticResource MenuUp}" />
+                            </Trigger>
+
+
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+        <Style x:Key="ButtonIconHyperlinkBorder"
+               TargetType="Button">
+
+
+            <Setter Property="MinHeight"
+                    Value="30" />
+
+            <Setter Property="Foreground"
+                    Value="{StaticResource buttonlabel}" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+
+                        <Border x:Name="border">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Border CornerRadius="5"
+                                        Width="25"
+                                        Height="25"
+                                        Background="{StaticResource TextBoxColor}">
+                                    <Path  Width="10"
+                                           Height="10"
+                                           Name="ico"
+                                           Data="{TemplateBinding Content}"
+                                           Fill="{TemplateBinding Foreground}"
+                                           Stretch="Uniform" />
+                                </Border>
+
+
+
+                                <TextBlock Foreground="{StaticResource buttonlabel}"
+                                           FontSize="15"
+                                           FontFamily="Lato"
+                                           FontStyle="Normal"
+                                           Grid.Column="2"
+                                           Text="{TemplateBinding Uid }"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+
+
+                        </Border>
+
+
+
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseCaptured"
+                                     Value="True">
+
+
+
+
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:.1"
+                                                             AutoReverse="True" />
+
+
+
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
+
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+
+
+
+
+        </Style>
+
+
+        <Style x:Key="ButtonIconImage"
+               TargetType="Button">
+
+
+            <Setter Property="MinHeight"
+                    Value="30" />
+
+            <Setter Property="Foreground"
+                    Value="{StaticResource buttonlabel}" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+
+                        <Border x:Name="border">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+
+                                <Grid Grid.Column="0">
+
+
+
+
+
+                                    <Border CornerRadius="0 5 5 0">
+                                        <Image  Width="30"
+                                                Height="30"
+                                                Source="{TemplateBinding Content,Converter={StaticResource ImageToSourceConverter}}"
+                                                Stretch="Uniform" />
+                                    </Border>
+
+
+
+                                    <Border CornerRadius="20"
+                                            Background="{StaticResource HeaderBar}"
+                                            Height="18"
+                                            Width="18"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Bottom"
+                                            Margin="0,0,-6,-6">
+
+                                        <Grid>
+                                            <Border Name="borderactive"
+                                                    Height="10"
+                                                    Width="10"
+                                                    CornerRadius="20"
+                                                    Background="#56A97A" />
+
+
+
+                                            <Path  Width="10"
+                                                   Height="10"
+                                                   Name="pathactive"
+                                                   Visibility="Hidden"
+                                                   Data="{StaticResource Circle}"
+                                                   Fill="{TemplateBinding Foreground}"
+                                                   Stretch="Uniform" />
+                                        </Grid>
+
+
+
+
+
+
+
+                                    </Border>
+
+
+
+                                </Grid>
+
+
+
+
+
+
+
+                                <TextBlock Foreground="{StaticResource buttonlabel}"
+                                           FontSize="15"
+                                           FontFamily="Lato"
+                                           FontStyle="Normal"
+                                           Grid.Column="2"
+                                           Text="{TemplateBinding Uid }"
+                                           VerticalAlignment="Center" />
+                            </Grid>
+
+
+                        </Border>
+
+
+
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseCaptured"
+                                     Value="True">
+
+
+
+
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:.1"
+                                                             AutoReverse="True" />
+
+
+
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
+
+
+                            </Trigger>
+
+
+                            <Trigger Property="AllowDrop"
+                                     Value="False">
+                                <Setter Property="Visibility"
+                                        TargetName="borderactive"
+                                        Value="Hidden" />
+
+
+                                <Setter Property="Visibility"
+                                        TargetName="pathactive"
+                                        Value="Visible" />
+
+                            </Trigger>
+
+
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+
+
+
+
+        </Style>
+
+
+        <Style x:Key="ButtonIconStar"
+               TargetType="ToggleButton">
+
+
+
+            <Setter Property="Height"
+                    Value="15" />
+            <Setter Property="Width"
+                    Value="15" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+
+                        <Border Background="Transparent"
+                                Name="border">
+                            <Grid>
+                                <Path  Height="{TemplateBinding Height}"
+                                       Width="{TemplateBinding Width}"
+                                       Name="ico"
+                                       Data="{StaticResource StarOn}"
+                                       Fill="{TemplateBinding Foreground}"
+                                       Stretch="Uniform" />
+                            </Grid>
+
+
+                        </Border>
+
+
+
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseCaptured"
+                                     Value="True">
+
+
+
+
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:.1"
+                                                             AutoReverse="True" />
+
+
+
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
+
+                            </Trigger>
+
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+                                <Setter Property="Data"
+                                        TargetName="ico"
+                                        Value="{StaticResource Star}" />
+
+                                <Setter Property="Fill"
+                                        TargetName="ico"
+                                        Value="Gold" />
+                            </Trigger>
+
+
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+
+
+
+
+        </Style>
+
+
+        <Style x:Key="textboxStyleButton"
+               TargetType="ToggleButton">
+
+
+
+            <Setter Property="Height"
+                    Value="15" />
+            <Setter Property="Width"
+                    Value="15" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+
+                        <Border Background="Transparent"
+                                Name="border">
+                            <Grid>
+                                <Path  Height="{TemplateBinding Height}"
+                                       Width="{TemplateBinding Width}"
+                                       Name="ico"
+                                       Data="{TemplateBinding Content}"
+                                       Fill="{StaticResource AppGray}"
+                                       Stretch="Uniform" />
+                            </Grid>
+
+
+                        </Border>
+
+
+
+
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseCaptured"
+                                     Value="True">
+
+
+
+
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="1"
+                                                             To="0"
+                                                             Duration="0:0:.1"
+                                                             AutoReverse="True" />
+
+
+
+
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="border"
+                                                             Storyboard.TargetProperty="(Border.Opacity)"
+                                                             From="0"
+                                                             To="1"
+                                                             Duration="0:0:.1" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
+
+                            </Trigger>
+
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+                                
+
+                                <Setter Property="Fill"
+                                        TargetName="ico"
+                                        Value="dodgerblue" />
+                            </Trigger>
+
+
+                        </ControlTemplate.Triggers>
+
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+
+
+
+
+        </Style>
+
+
+    </Window.Resources>
+
+
+
+    <Grid Background="Transparent">
+        <Border  Background="{StaticResource HeaderBar}"
+                 CornerRadius="10"
+                 BorderBrush="{x:Null}">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+
+                <!--<Grid Height=".2" Grid.Row="2" Background="White"/>-->
+
+                <Grid VerticalAlignment="Bottom"
+                      Background="Gray"
+                      Height="1"
+                      Grid.Row="2"
+                      Opacity=".2" />
+
+                <!--#region  Header -->
+                <Grid Grid.Row="1"
+                      Margin="10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="60" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left">
+                        <Button  Background="#ED6A5E"
+                                 Style="{StaticResource btnHeader}" />
+
+                        <Button Margin="10 0"
+                                Background="#F4BD4F"
+                                Style="{StaticResource btnHeader}" />
+
+                        <Button  Background="#61C354"
+                                 Style="{StaticResource btnHeader}" />
+                    </StackPanel>
+
+
+                    <Grid Grid.Column="2">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30" />
+
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="30" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                                Style="{StaticResource ButtonIcon}"
+                                Content="{StaticResource ArrowLeft}"
+                                Foreground="White" />
+
+
+                        <Button Grid.Column="2"
+                                Style="{StaticResource ButtonIcon}"
+                                Content="{StaticResource ArrowRight}"
+                                Foreground="White" />
+
+
+                        <Button Grid.Column="4"
+                                Style="{StaticResource ButtonIcon}"
+                                Content="{StaticResource Clock}"
+                                Foreground="White"
+                                Height="30"
+                                Width="22" />
+
+                        <Button Grid.Column="8"
+                                Style="{StaticResource ButtonIcon}"
+                                Content="{StaticResource Help}"
+                                Foreground="White"
+                                Width="22"
+                                Height="30" />
+
+
+                        <TextBox Uid="Search DesignersKR"
+                                 Grid.Column="6"
+                                 Style="{StaticResource SearchTextBox}" />
+
+
+
+
+
+                    </Grid>
+
+                    <Grid Grid.Column="4">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0"
+                                Background="{StaticResource TextBoxColor}"
+                                CornerRadius="5 0 0 5" />
+
+
+
+                        <Grid Grid.Column="1">
+                            <Border CornerRadius="0 5 5 0">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0"
+                                                         EndPoint="0,1">
+
+                                        <GradientStop Color="#f12711"
+                                                      Offset="0" />
+
+                                        <GradientStop Color="#f5af19"
+                                                      Offset="1.0" />
+
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+
+
+
+                            <Border CornerRadius="20"
+                                    Background="{StaticResource HeaderBar}"
+                                    Height="18"
+                                    Width="18"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    Margin="0,0,-6,-6">
+
+                                <Border Height="10"
+                                        Width="10"
+                                        CornerRadius="20"
+                                        Background="#56A97A" />
+
+                            </Border>
+
+
+
+                        </Grid>
+
+
+                    </Grid>
+
+
+                </Grid>
+
+                <!--#endregion-->
+
+
+                <!--#region Content-->
+
+                <Grid Grid.Row="3"
+                      Margin="5,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="250" />
+
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+
+                    <!--#region  First Division-->
+
+
+                    <ScrollViewer Grid.Column="0"
+                                  Margin="0,0,0,10"
+                                  VerticalScrollBarVisibility="Hidden">
+
+                        <StackPanel>
+                            <ItemsControl ItemsSource="{Binding CategoiresList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton GroupName="m"
+                                                     Content="{Binding Name,Converter={StaticResource FirstCharConvertor}}"
+                                                     VerticalAlignment="Top"
+                                                     Style="{StaticResource btnStyle}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button Command="{Binding AddCatCommand}"
+                                    Margin="0,10,0,0"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Bottom"
+                                    Style="{StaticResource ButtonIcon}"
+                                    Content="{StaticResource Add}"
+                                    Foreground="White"
+                                    Height="20"
+                                    Width="20" />
+                        </StackPanel>
+
+
+                    </ScrollViewer>
+
+
+
+
+
+
+
+
+
+                    <Grid HorizontalAlignment="Right"
+                          Width="1"
+                          Background="Gray"
+                          Opacity=".2"
+                          Grid.Column="1" />
+
+                    <!--#endregion-->
+
+
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="60" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+
+                        </Grid.RowDefinitions>
+
+
+                        <Grid VerticalAlignment="Bottom"
+                              Background="Gray"
+                              Height="1"
+                              Grid.Row="1"
+                              Opacity=".2" />
+
+
+
+                        <Grid Margin="10,0"
+                              Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="50" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock FontFamily="lato"
+                                       VerticalAlignment="Center"
+                                       FontSize="20"
+                                       Text="Test"
+                                       Foreground="White" />
+
+
+
+                            <Button Grid.Column="2"
+                                    Foreground="White"
+                                    Content="{StaticResource Pencel}"
+                                    Style="{StaticResource ButtonIconPen}" />
+
+                        </Grid>
+
+
+
+                        <Grid Margin="10,0"
+                              Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Button Command="{Binding AddCatCommand}"
+                                    Grid.Row="0"
+                                    Foreground="White"
+                                    Uid="Mentions and reactions"
+                                    VerticalAlignment="Top"
+                                    Content="{StaticResource AtLogo }"
+                                    Style="{StaticResource ButtonIconHyperlink}" />
+
+                            <Button Grid.Row="1"
+                                    Uid="Saved items"
+                                    VerticalAlignment="Top"
+                                    Content="{StaticResource bookmarks }"
+                                    Style="{StaticResource ButtonIconHyperlink}" />
+
+                            <Button Grid.Row="2"
+                                    Uid="Saved items"
+                                    VerticalAlignment="Top"
+                                    Content="{StaticResource Dots }"
+                                    Style="{StaticResource ButtonIconHyperlink}" />
+
+
+
+                            <ScrollViewer Grid.Row="3"
+                                          VerticalScrollBarVisibility="Hidden">
+                                <StackPanel>
+
+                                    <!--<Grid HorizontalAlignment="Left" Width="50" Height="50" Grid.Column="1">
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        <Border CornerRadius="0 5 5 0">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0"
+                                                                     EndPoint="0,1">
+
+                                                    <GradientStop Color="#f12711"
+                                                                  Offset="0" />
+
+                                                    <GradientStop Color="#f5af19"
+                                                                  Offset="1.0" />
+
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                        </Border>
+
+
+
+                                        <Border CornerRadius="20"
+                                                Background="{StaticResource HeaderBar}"
+                                                Height="18"
+                                                Width="18"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Bottom"
+                                                Margin="0,0,-6,-6">
+
+                                            <Border Height="10"
+                                                    Width="10"
+                                                    CornerRadius="20"
+                                                    Background="#56A97A" />
+
+                                        </Border>
+
+
+
+                                    </Grid>-->
+
+                                    <ToggleButton IsChecked="True"
+                                                  Margin="0,10"
+                                                  Content="Channels"
+                                                  Style="{StaticResource ButtonAsExpander}"
+                                                  Height="20"
+                                                  Name="TogChannels" />
+
+
+
+                                    <StackPanel Visibility="{Binding ElementName=TogChannels,Path=IsChecked,Converter={StaticResource BoolToVis}}">
+                                        <ItemsControl Margin="10,0"
+                                                      ItemsSource="{Binding Channelslist}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Command="{Binding DataContext.SelectChannelCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type ItemsControl}}}"
+                                                            CommandParameter="{Binding .}"
+                                                            Grid.Row="0"
+                                                            Uid="{Binding Name}"
+                                                            VerticalAlignment="Top"
+                                                            Content="{StaticResource Hash }"
+                                                            Style="{StaticResource ButtonIconHyperlink}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <Button Command="{Binding AddChannelCommand}"
+                                                Margin="5,0,0,0"
+                                                Grid.Column="0"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Left"
+                                                Style="{StaticResource ButtonIconHyperlinkBorder}"
+                                                Content="{StaticResource Add}"
+                                                Uid="Add channels" />
+                                    </StackPanel>
+
+
+                                    <ToggleButton IsChecked="True"
+                                                  Margin="0,10"
+                                                  Content="Direct messages"
+                                                  Style="{StaticResource ButtonAsExpander}"
+                                                  Height="20"
+                                                  Name="TogDirectmessages" />
+
+
+
+                                    <StackPanel Visibility="{Binding ElementName=TogDirectmessages,Path=IsChecked,Converter={StaticResource BoolToVis}}">
+                                        <ItemsControl Margin="10,0"
+                                                      ItemsSource="{Binding ProfileInfos}">
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Margin="0 5"
+                                                            Grid.Row="0"
+                                                            AllowDrop="{Binding Status}"
+                                                            Uid="{Binding Name}"
+                                                            VerticalAlignment="Top"
+                                                            Content="{Binding  Image}"
+                                                            Style="{StaticResource ButtonIconImage}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <Button Command="{Binding AddChannelCommand}"
+                                                Margin="10,0,0,0"
+                                                Grid.Column="0"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Left"
+                                                Style="{StaticResource ButtonIconHyperlinkBorder}"
+                                                Content="{StaticResource Add}"
+                                                Uid="Add Teammates" />
+                                    </StackPanel>
+
+
+
+                                </StackPanel>
+
+                            </ScrollViewer>
+
+
+
+
+                        </Grid>
+
+
+
+                    </Grid>
+
+
+
+
+
+                    <Border BorderBrush="{x:Null}"
+                            CornerRadius="0,0,10,0"
+                            Grid.Column="3"
+                            Background="White" />
+
+
+                    <Grid Margin="0,0,0,12"
+                          Grid.Column="3"
+                          Background="White">
+
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                            <RowDefinition Height="115"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid VerticalAlignment="Bottom"
+                              Background="Gray"
+                              Height="1"
+                              Grid.Row="1"
+                              Opacity=".2" />
+
+
+                        <Grid Margin="10,0"
+                              Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel VerticalAlignment="Center"
+                                        Grid.Column="0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="lato"
+                                               FontWeight="Black"
+                                               FontSize="18"
+                                               Text="{Binding ChannelName}"
+                                               VerticalAlignment="Center" />
+
+
+                                    <ToggleButton Margin="10 0,10 4"
+                                                  Width="22"
+                                                  Height="30"
+                                                  Content="{StaticResource StarOn}"
+                                                  Style="{StaticResource ButtonIconStar}" />
+
+                                </StackPanel>
+
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <Button Grid.Row="1" Foreground="{StaticResource AppGray}"
+                                            Uid="13"
+                                            VerticalAlignment="Top"
+                                            Content="{StaticResource Pin }"
+                                            Style="{StaticResource ButtonIconHyperlink}" />
+
+
+                                    <TextBlock Foreground="{StaticResource AppGray}"
+                                               FontSize="15"
+                                               FontFamily="Lato"
+                                               FontStyle="Normal"
+                                               Margin="10 0"
+                                               Text="|"
+                                               VerticalAlignment="Center" />
+
+                                    <Button Foreground="{StaticResource AppGray}" Grid.Row="1"
+                                            Uid="{Binding ChannelNote}"
+                                            VerticalAlignment="Top"
+                                            Style="{StaticResource ButtonIconHyperlink}" />
+
+                                </StackPanel>
+                            </StackPanel>
+
+
+
+                            <StackPanel HorizontalAlignment="Right"
+                                        Orientation="Horizontal"
+                                        Grid.Column="2">
+                                <Grid Height="30"
+                                      VerticalAlignment="Center">
+
+
+                                    <Image HorizontalAlignment="Left"
+                                           Width="30"
+                                           Stretch="Fill"
+                                           Source="images\imagetop1.png" />
+
+                                    <Image Margin="20 0"
+                                           HorizontalAlignment="Left"
+                                           Width="30"
+                                           Stretch="Fill"
+                                           Source="images\imagetop2.png" />
+
+                                    <Image Margin="40 0,0,0"
+                                           HorizontalAlignment="Left"
+                                           Width="30"
+                                           Stretch="Fill"
+                                           Source="images\imagetop3.png" />
+
+
+
+
+
+                                </Grid>
+
+                                <TextBlock Margin="15 0" FontFamily="lato"
+                                           VerticalAlignment="Center"
+                                           FontSize="20"
+                                           Text="493"
+                                           Foreground="Black" />
+
+
+
+                                <Button Grid.Column="4"
+                                        Style="{StaticResource ButtonIcon}"
+                                        Content="{StaticResource AddAccount}"
+                                        Foreground="{StaticResource AppGray}"
+                                        Height="30"
+                                        Width="22" Margin="20 0"/>
+
+                                <Button Grid.Column="4"
+                                        Style="{StaticResource ButtonIcon}"
+                                        Content="{StaticResource InfoCircle}"
+                                        Foreground="{StaticResource AppGray}"
+                                        Height="30"
+                                        Width="22" Margin="0,0,20,0" />
+
+                            </StackPanel>
+
+
+
+
+
+                        </Grid>
+
+
+
+                        <Grid Margin="10" Grid.Row="4">
+                            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                       
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="4" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBox Text="{Binding MessageValue}" FontWeight="{Binding FontWeightMvvM,Mode=TwoWay}"
+                                             FontStyle="{Binding FontStyleMvvm}"
+                                             Uid="Message # uxui_design"
+                                             Margin="10"
+                                             Style="{StaticResource MessageTextBox}" />
+
+                                    <StackPanel Orientation="Horizontal" Margin="10 0 0 0" HorizontalAlignment="Left" Grid.Row="1">
+                                        <Button 
+                                                Style="{StaticResource ButtonIcon}"
+                                                Content="{StaticResource Flash}"
+                                                Foreground="{StaticResource AppGray}"
+                                                Height="20"
+                                                Width="22"
+                                                 />
+
+                                        <Grid Background="{StaticResource AppGray}"
+                                                 Width="1" Height="30"
+                                                   Margin="5 0,0,1"
+                                                  
+                                                   VerticalAlignment="Center" />
+
+
+
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource Bold}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                      Command="{Binding SetBoldFontCommand}"
+                                                      />
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource Italic}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                      Command="{Binding SetItalicFontCommand}"
+                                                      />
+
+
+
+
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource strikethrough}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                       />
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource HyperLink}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                       />
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource Code}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                       />
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource NumberList}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                     />
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource BulletedList}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                      />
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource align-left}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                       />
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource CodeBraces}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                      />
+
+                                    </StackPanel>
+
+
+
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="10 0 0 0"
+                                                HorizontalAlignment="Right"
+                                                Grid.Row="1">
+                                        
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource ChangeCase}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                      Command="{Binding SetBoldFontCommand}" />
+
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource AtLogo   }"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                      Command="{Binding SetBoldFontCommand}" />
+                                        <ToggleButton Margin="10 0 10,3"
+                                                      Height="15"
+                                                      Width="22"
+                                                      Content="{StaticResource emoti}"
+                                                      Style="{StaticResource textboxStyleButton}"
+                                                      Command="{Binding SetItalicFontCommand}" />
+
+
+
+
+                                        <Button Command="{Binding SentMessageCommand}" Grid.Column="4"
+                                                Style="{StaticResource ButtonIcon}"
+                                                Content="{StaticResource Sent}"
+                                                Foreground="{StaticResource AppGray}"
+                                                Height="15"
+                                                Width="22"
+                                                Margin="10,0,20,3" />
+
+
+                                    </StackPanel>
+
+
+
+
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+
+
+
+
+
+
+                        <Grid Grid.Row="2">
+                            <ScrollViewer Name="MessageScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                                <ItemsControl  Margin="10,10 0 0"
+                                              ItemsSource="{Binding MassegeDatas}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel VerticalAlignment="Bottom" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition />
+                                                    <RowDefinition Height="20" />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+
+
+                                                <Grid
+                                                      >
+                                                    <Grid Height="1"
+                                                          Background="{StaticResource buttonlabel}" />
+
+                                                    <Border HorizontalAlignment="Center"
+                                                            BorderBrush="{StaticResource buttonlabel}"
+                                                            BorderThickness="1" Background="White"
+                                                            CornerRadius="12">
+                                                        <TextBlock FontWeight="Bold" FontSize="13" FontFamily="Lato" Margin="20,4" Text="{Binding date,Converter={StaticResource DateTimeConvertor}}"/>
+                                                    </Border>
+                                                    
+                                                </Grid>
+
+
+                                                <Grid Grid.Row="2">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="30" />
+                                                        <ColumnDefinition Width="5" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Image VerticalAlignment="Top"
+                                                           Width="30"
+                                                           Height="30"
+                                                           Source="{Binding Image,Converter={StaticResource ImageToSourceConverter}}"
+                                                           Stretch="Uniform" />
+
+                                                    <Grid Grid.Column="2">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="auto" />
+                                                            <RowDefinition Height="2" />
+                                                            <RowDefinition />
+                                                            <RowDefinition Height="10" />
+                                                            <RowDefinition Height="30"/>
+                                                            <RowDefinition Height="15" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock VerticalAlignment="Top"
+                                                                       FontFamily="lato"
+                                                                       FontWeight="Bold"
+                                                                       FontSize="18"
+                                                                       Text="{Binding UserName}" />
+
+
+                                                            <TextBlock Foreground="{StaticResource AppGray}"
+                                                                       Margin="5,0,0,2"
+                                                                       VerticalAlignment="Bottom"
+                                                                       FontFamily="lato"
+                                                                       FontWeight="Normal"
+                                                                       FontSize="12"
+                                                                       Text="{Binding date,StringFormat=h:mm tt}" />
+
+                                                        </StackPanel>
+
+
+                                                        <TextBlock Grid.Row="2"
+                                                                   TextWrapping="WrapWithOverflow"
+                                                                   FontFamily="Lato"
+                                                                   FontSize="15"
+                                                                   Text="{Binding Message}" />
+
+
+
+                                                        <StackPanel  Grid.Row="4" Orientation="Horizontal">
+                                                            <ItemsControl HorizontalAlignment="Left"
+                                                                          ItemsSource="{Binding images}"
+                                                                          Background="Transparent">
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <WrapPanel />
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Image Margin="0 0 5 0"
+                                                                               Width="20"
+                                                                               Height="20"
+                                                                               Stretch="Uniform"
+                                                                               Source="{Binding imageSource,Converter={StaticResource ImageToSourceConverter}}" />
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+
+                                                            </ItemsControl>
+
+                                                            <TextBlock VerticalAlignment="Top"
+                                                                       FontFamily="lato"
+                                                                       FontWeight="Bold"
+                                                                       FontSize="18"
+                                                                       Text="{Binding NumberReplay}" />
+
+
+                                                        </StackPanel>
+
+
+                                                    </Grid>
+
+                                                </Grid>
+
+                                            </Grid>
+
+
+
+
+
+
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                            </ScrollViewer>
+                        </Grid>
+                        
+
+                      
+
+
+
+                    </Grid>
+
+                </Grid>
+
+
+                <!--#endregion-->
+
+            </Grid>
+
+
+
+        </Border>
+
+    </Grid>
+</Window>
